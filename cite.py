@@ -1,6 +1,5 @@
 import streamlit as st
 
-import pages.description as description
 import pages.sportclassifier as sportclassifier
 import pages.cellclassifier as cellclassifier
 import streamlit as st
