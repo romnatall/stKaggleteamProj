@@ -87,7 +87,7 @@ class MyModel(lg.LightningModule):
 
 @st.cache_resource
 def get_model():
-    model=torch.load("bruhmodel62.pt",map_location=torch.device('cpu'))
+    model=torch.load("cellmodel.pt",map_location=torch.device('cpu'))
     model.eval()
     return model
 
@@ -108,3 +108,15 @@ def classify_image(image_path):
         probabilities = torch.nn.functional.softmax(output[0], dim=0)
         predicted_class = torch.argmax(probabilities).item()
     return predicted_class, probabilities[predicted_class].item()
+
+st.title("Классификация клеток крови")
+
+uploaded_file = st.file_uploader("Выберите изображение...", type=["jpg", "jpeg", "png"])
+
+if uploaded_file is not None:
+    st.image(uploaded_file, use_column_width=True)
+    st.write("")
+    d = {0: 'EOSINOPHIL', 1: 'LYMPHOCYTE', 2: 'MONOCYTE', 3: 'NEUTROPHIL'}
+    predicted_class, confidence = classify_image(uploaded_file)
+    st.write(f"предсказанный класс: {d[predicted_class]}")
+

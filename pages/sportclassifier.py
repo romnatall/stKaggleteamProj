@@ -7,13 +7,28 @@ import requests
 from io import BytesIO
 from torchvision.models import resnet18, ResNet18_Weights
 from torchvision import transforms
-from model import MyResNet
 
 
+
+class MyResNet(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.model = resnet18(weights=ResNet18_Weights.DEFAULT)
+        #замена слоя
+        self.model.fc = nn.Linear(512, 100)
+        #разморозка
+        for i in self.model.parameters():
+            i.requires_grad = False
+
+        self.model.fc.weight.requires_grad = True
+        self.model.fc.bias.requires_grad = True
+
+    def forward(self, x):
+        return self.model(x)
 
 
 def load_model():
-    model=torch.load("model_18.pt",map_location=torch.device('cpu'))
+    model=torch.load("sportmodel.pt",map_location=torch.device('cpu'))
     #st.write(model)
     model.eval()
     return model
@@ -57,31 +72,18 @@ def predict_image(image):
     #st.write(output)
     return idx2class[predicted_class],predicted_class
 
-def main():
+
+    
+st.title("Kлассификация изображений")
+uploaded_file = st.file_uploader("Загрузите изображение", type=["jpg", "jpeg", "png"])
+if uploaded_file is not None:
+    image = Image.open(uploaded_file)
+    st.image(image, caption='Загруженное изображение', use_column_width=True)
         
-    st.title("Kлассификация изображений")
-    uploaded_file = st.file_uploader("Загрузите изображение", type=["jpg", "jpeg", "png"])
-    if uploaded_file is not None:
-        image = Image.open(uploaded_file)
-        st.image(image, caption='Загруженное изображение', use_column_width=True)
-            
-        if st.button('Предсказать'):
-            prediction,predicted_class = predict_image(image)
-            st.write(f'Название класса: {prediction}   Предсказанный класс: {predicted_class}')
+    if st.button('Предсказать'):
+        prediction,predicted_class = predict_image(image)
+        st.write(f'Название класса: {prediction}   Предсказанный класс: {predicted_class}')
 
 
-
-
-
-
-
-# image_url = st.text_input("Введите URL изображения:")
-# if st.button("Загрузить изображение по ссылке"):
-#     response = requests.get(image_url)
-#     if response.status_code == 200:
-#         image = Image.open(BytesIO(response.content))
-#         st.image(image, caption='Image from URL.', use_column_width=True)
-#         prediction = predict_image(image)
-#         st.write("Предсказанный класс:", prediction)
 
 
