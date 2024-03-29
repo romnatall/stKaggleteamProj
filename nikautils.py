@@ -25,10 +25,8 @@ class MyResNet(nn.Module):
     def forward(self, x):
         return self.model(x)
 
-
-
 def get_model():
-    model=torch.load("model.pt")
+    model=torch.load("bruhmodel62.pt")
     model.eval()
     return model
 

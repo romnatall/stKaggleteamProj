@@ -9,8 +9,12 @@ from torchvision.models import resnet18, ResNet18_Weights
 from torchvision import transforms
 from model import MyResNet
 
+
+
+
 def load_model():
-    model=torch.load("weights.pt",map_location=torch.device('cpu'))
+    model=torch.load("model_18.pt",map_location=torch.device('cpu'))
+    #st.write(model)
     model.eval()
     return model
 
@@ -51,7 +55,7 @@ def predict_image(image):
     with torch.no_grad():
         output = model(image_tensor)
         predicted_class = torch.argmax(output).item()
-    return idx2class[predicted_class]
+    return idx2class[predicted_class],predicted_class
 
 def main():
         
@@ -62,10 +66,9 @@ def main():
         st.image(image, caption='Загруженное изображение', use_column_width=True)
             
         if st.button('Предсказать'):
-            prediction = predict_image(image)
-            st.write(f'Название класса: {prediction}')
+            prediction,predicted_class = predict_image(image)
+            st.write(f'Название класса: {prediction}   Предсказанный класс: {predicted_class}')
 
-        prediction = predict_image(image)
 
 
 

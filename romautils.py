@@ -85,7 +85,7 @@ class MyModel(lg.LightningModule):
                 self.trainer.save_checkpoint("last_model.pt")
                 return
 
-
+@st.cache_resource
 def get_model():
     model=torch.load("bruhmodel62.pt",map_location=torch.device('cpu'))
     model.eval()

@@ -4,6 +4,7 @@ import romautils
 from romautils import Model,MyModel
 import streamlit as st
 
+from model import MyResNet
 
 
 # Настройки страницы
