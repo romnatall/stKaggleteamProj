@@ -1,5 +1,4 @@
 from pyexpat import model
-from turtle import mode
 from torch import nn
 import aiogram
 from io import BytesIO
