@@ -47,7 +47,6 @@ def preprocess_image(image):
     return image
 
 def predict_image(image):
-
     model = load_model()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     image = image.convert('RGB')
@@ -55,6 +54,7 @@ def predict_image(image):
     with torch.no_grad():
         output = model(image_tensor)
         predicted_class = torch.argmax(output).item()
+    #st.write(output)
     return idx2class[predicted_class],predicted_class
 
 def main():
